@@ -1,0 +1,17 @@
+##Read the data from the Household power consumption file only the rows for two days in Feb 
+k<-read.table('household_power_consumption.txt',skip=66637,nrows=2880,header=FALSE,sep=';',stringsAsFactors=FALSE)
+##Read the heders related to the household power consumption data 
+header<-read.table('household_power_consumption.txt',nrows=1,header=FALSE,sep=';',stringsAsFactors=FALSE)
+##Assign the colnames to the object K which has the data for two days
+colnames(k)<-unlist(header)
+##create a object h which is combination of Date and Time from the object k above
+h<-paste(k$Date,k$Time)
+## convert h to date and time format, lubridate package required. Commands install.packages("lubridate") and library(lubridate)
+l<-dmy_hms(h)
+##bind the l with the K as a new column, the new column has the data and time together
+kl<-cbind(k,l)
+##Plot in png, with pixels of 480
+png("plot2.png",width=480,height=480)
+with(kl,plot(l,Global_active_power,type="l",xlab="",ylab="Global Active Power (kilowatts)"))
+dev.off()
+
